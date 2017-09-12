@@ -43,6 +43,7 @@ fun main(args: Array<String>) {
     // Решаем x^2 - 3*x + 2 = 0
     val x1x2 = quadraticRootProduct(1.0, -3.0, 2.0)
     println("Root product: $x1x2")
+    println(angleInRadian(36,14,35))
 }
 
 /**
@@ -68,7 +69,7 @@ fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double = (sagenes
  * Пользователь задает угол в градусах, минутах и секундах (например, 36 градусов 14 минут 35 секунд).
  * Вывести значение того же угла в радианах (например, 0.63256).
  */
-fun angleInRadian(grad: Int, min: Int, sec: Int): Double = (sec / 3600 + min / 60 + grad) / 180.0 * Math.PI
+fun angleInRadian(grad: Int, min: Int, sec: Int): Double = (sec / 3600.0 + min / 60.0 + grad) / 180.0 * Math.PI
 
 /**
  * Тривиальная
