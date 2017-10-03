@@ -162,8 +162,8 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
  * sin(x) = x - x^3 / 3! + x^5 / 5! - x^7 / 7! + ...
  * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
  */
-fun sin(x: Double, eps: Double): Double {
-    var answer = x
+fun sin(x: Double, eps: Double): Double = TODO()
+    /*var answer = x
     var nx = x
     while (abs(nx) >= 2 * PI) {
         nx = when {
@@ -176,8 +176,7 @@ fun sin(x: Double, eps: Double): Double {
         answer += pow(nx, i.toDouble()) / factorial(abs(i))
         if (i > 0) i = -(i + 2) else -(i - 2)
     }
-    return answer
-}
+    return answer*/
 
 /**
  * Средняя
