@@ -1,7 +1,6 @@
 @file:Suppress("UNUSED_PARAMETER")
 package lesson3.task1
 
-import lesson1.task1.sqr
 import java.lang.Math.*
 
 /**
@@ -68,7 +67,7 @@ fun digitNumber(n: Int): Int {
 
     var k = 0
     var num = n
-    while (num != 0){
+    while (num != 0) {
         k++
         num /= 10
     }
@@ -83,7 +82,7 @@ fun digitNumber(n: Int): Int {
  */
 fun fib(n: Int): Int = when {
     n in 1..2 -> 1
-    else -> fib(n-2) + fib(n-1)
+    else -> fib(n - 2) + fib(n - 1)
 }
 
 /**
@@ -109,7 +108,7 @@ fun lcm(m: Int, n: Int): Int {
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
 fun minDivisor(n: Int): Int {
-    for (i in 2..n){
+    for (i in 2..(n / 2)) {
         if (n % i == 0) return i
     }
     return n
@@ -162,21 +161,19 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
  * sin(x) = x - x^3 / 3! + x^5 / 5! - x^7 / 7! + ...
  * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
  */
-fun sin(x: Double, eps: Double): Double = TODO()
-    /*var answer = x
-    var nx = x
-    while (abs(nx) >= 2 * PI) {
-        nx = when {
-            nx > 0 -> nx - 2 * PI
-            else -> nx + 2 * PI
-        }
+fun sin(x: Double, eps: Double): Double {
+    val nx = x % (2 * PI)
+    var answer = nx
+    var i = 3
+    var summand = pow(nx, i.toDouble()) / factorial(i)
+    while (abs(summand) >= eps) {
+        summand = pow(nx, i.toDouble()) / factorial(i)
+        if ((i + 1) % 4 == 0) answer -= summand
+        else answer += summand
+        i += 2
     }
-    var i = -3
-    while (abs(pow(nx, i.toDouble()) / factorial(abs(i))) >= eps) {
-        answer += pow(nx, i.toDouble()) / factorial(abs(i))
-        if (i > 0) i = -(i + 2) else -(i - 2)
-    }
-    return answer*/
+    return answer
+}
 
 /**
  * Средняя
@@ -185,7 +182,19 @@ fun sin(x: Double, eps: Double): Double = TODO()
  * cos(x) = 1 - x^2 / 2! + x^4 / 4! - x^6 / 6! + ...
  * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
  */
-fun cos(x: Double, eps: Double): Double = TODO()
+fun cos(x: Double, eps: Double): Double {
+    val nx = x % (2 * PI)
+    var answer = 1.0
+    var i = 2
+    var summand = pow(nx, i.toDouble()) / factorial(i)
+    while (abs(summand) >= eps) {
+        summand = pow(nx, i.toDouble()) / factorial(i)
+        if ((i + 2) % 4 == 0) answer -= summand
+        else answer += summand
+        i += 2
+    }
+    return answer
+}
 
 /**
  * Средняя
@@ -193,7 +202,18 @@ fun cos(x: Double, eps: Double): Double = TODO()
  * Поменять порядок цифр заданного числа n на обратный: 13478 -> 87431.
  * Не использовать строки при решении задачи.
  */
-fun revert(n: Int): Int = TODO()
+fun revert(n: Int): Int {
+    var num = n
+    var k = 0
+    var result = 0
+    while (num != 0){
+        result *= 10
+        result += num % 10
+        num /= 10
+        k++
+    }
+    return result
+}
 
 /**
  * Средняя
@@ -202,7 +222,7 @@ fun revert(n: Int): Int = TODO()
  * первая цифра равна последней, вторая -- предпоследней и так далее.
  * 15751 -- палиндром, 3653 -- нет.
  */
-fun isPalindrome(n: Int): Boolean = TODO()
+fun isPalindrome(n: Int): Boolean = n == revert(n)
 
 /**
  * Средняя
@@ -210,7 +230,15 @@ fun isPalindrome(n: Int): Boolean = TODO()
  * Для заданного числа n определить, содержит ли оно различающиеся цифры.
  * Например, 54 и 323 состоят из разных цифр, а 111 и 0 из одинаковых.
  */
-fun hasDifferentDigits(n: Int): Boolean = TODO()
+fun hasDifferentDigits(n: Int): Boolean {
+    var num = n
+    val digit = n % 10
+    while (num != 0){
+        if (num % 10 != digit) return true
+        num /= 10
+    }
+    return false
+}
 
 /**
  * Сложная
@@ -219,7 +247,17 @@ fun hasDifferentDigits(n: Int): Boolean = TODO()
  * 149162536496481100121144...
  * Например, 2-я цифра равна 4, 7-я 5, 12-я 6.
  */
-fun squareSequenceDigit(n: Int): Int = TODO()
+fun squareSequenceDigit(n: Int): Int {
+    var num = 1
+    var length = 1
+    var numSqr = 1
+    while (length < n){
+        num++
+        numSqr = num * num
+        length += digitNumber(numSqr)
+    }
+    return (numSqr / pow(10.0, (length - n).toDouble()) % 10).toInt()
+}
 
 /**
  * Сложная
@@ -228,4 +266,14 @@ fun squareSequenceDigit(n: Int): Int = TODO()
  * 1123581321345589144...
  * Например, 2-я цифра равна 1, 9-я 2, 14-я 5.
  */
-fun fibSequenceDigit(n: Int): Int = TODO()
+fun fibSequenceDigit(n: Int): Int {
+    var num = 1
+    var length = 1
+    var numFib = 1
+    while (length < n){
+        num++
+        numFib = fib(num)
+        length += digitNumber(numFib)
+    }
+    return (numFib / pow(10.0, (length - n).toDouble()) % 10).toInt()
+}

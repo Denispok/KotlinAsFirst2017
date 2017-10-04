@@ -83,13 +83,13 @@ fun timeForHalfWay(t1: Double, v1: Double,
 fun whichRookThreatens(kingX: Int, kingY: Int,
                        rookX1: Int, rookY1: Int,
                        rookX2: Int, rookY2: Int): Int {
-    val atk_rook_1 = kingX == rookX1 || kingY == rookY1
-    val atk_rook_2 = kingX == rookX2 || kingY == rookY2
+    val atkRook1 = kingX == rookX1 || kingY == rookY1
+    val atkRook2 = kingX == rookX2 || kingY == rookY2
     return when {
-    atk_rook_1 && atk_rook_2 -> 3
-    atk_rook_2 -> return 2
-    atk_rook_1 -> 1
-    else -> 0
+        atkRook1 && atkRook2 -> 3
+        atkRook2 -> return 2
+        atkRook1 -> 1
+        else -> 0
     }
 }
 
@@ -106,10 +106,12 @@ fun whichRookThreatens(kingX: Int, kingY: Int,
 fun rookOrBishopThreatens(kingX: Int, kingY: Int,
                           rookX: Int, rookY: Int,
                           bishopX: Int, bishopY: Int): Int {
+    val atkRook = kingX == rookX || kingY == rookY
+    val atkBishop = Math.abs(kingX - bishopX) == Math.abs(kingY - bishopY)
     return when {
-        (kingX == rookX || kingY == rookY) && (Math.abs(kingX - bishopX) == Math.abs(kingY - bishopY)) -> 3
-        (Math.abs(kingX-bishopX) == Math.abs(kingY-bishopY)) -> 2
-        (kingX == rookX || kingY == rookY) -> 1
+        atkRook && atkBishop -> 3
+        atkBishop -> 2
+        atkRook -> 1
         else -> 0
     }
 }
