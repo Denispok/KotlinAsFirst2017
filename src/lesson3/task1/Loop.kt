@@ -134,6 +134,7 @@ fun maxDivisor(n: Int): Int {
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
 fun isCoPrime(m: Int, n: Int): Boolean {
+    if (m == n) return false
     for (i in 2..(maxOf(m, n) / 2)) {
         if (m % i == 0 && n % i == 0) return false
     }
@@ -267,13 +268,13 @@ fun squareSequenceDigit(n: Int): Int {
  * Например, 2-я цифра равна 1, 9-я 2, 14-я 5.
  */
 fun fibSequenceDigit(n: Int): Int {
-    var num = 1
     var length = 1
-    var numFib = 1
+    var numFib1 = 1
+    var numFib2 = 0
     while (length < n){
-        num++
-        numFib = fib(num)
-        length += digitNumber(numFib)
+        numFib1 += numFib2
+        numFib2 = numFib1 - numFib2
+        length += digitNumber(numFib1)
     }
-    return (numFib / pow(10.0, (length - n).toDouble()) % 10).toInt()
+    return (numFib1 / pow(10.0, (length - n).toDouble()) % 10).toInt()
 }
