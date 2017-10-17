@@ -91,13 +91,13 @@ fun fib(n: Int): Int = when {
  * Для заданных чисел m и n найти наименьшее общее кратное, то есть,
  * минимальное число k, которое делится и на m и на n без остатка
  */
-fun lcm(m: Int, n: Int): Int {
-    for (k in 1..maxOf(m, n)) {
-        when {
-            (k * n % m == 0) && (k * m % n == 0) -> return minOf(k * n, k * m)
-            (k * n % m == 0) -> return k * n
-            (k * m % n == 0) -> return k * m
-        }
+
+fun lcm(m: Int, n: Int): Int = abs(m * n) / gcd(m, n)
+
+//  НОД
+fun gcd(n: Int, m: Int): Int {
+    for (i in minOf(n,m) downTo 1) {
+        if (m % i == 0 && n % i == 0) return i
     }
     return 0
 }
@@ -133,13 +133,7 @@ fun maxDivisor(n: Int): Int {
  * Взаимно простые числа не имеют общих делителей, кроме 1.
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
-fun isCoPrime(m: Int, n: Int): Boolean {
-    if (m == n) return false
-    for (i in 2..(maxOf(m, n) / 2)) {
-        if (m % i == 0 && n % i == 0) return false
-    }
-    return true
-}
+fun isCoPrime(m: Int, n: Int): Boolean = lcm(m, n) == m * n
 
 /**
  * Простая
@@ -149,8 +143,10 @@ fun isCoPrime(m: Int, n: Int): Boolean {
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
 fun squareBetweenExists(m: Int, n: Int): Boolean {
+    var k: Int
     for (i in m..n){
-        if ((sqrt(i.toDouble()).toInt() * sqrt(i.toDouble()).toInt()) == i) return true
+        k = sqrt(i.toDouble()).toInt()
+        if (k * k == i) return true
     }
     return false
 }
@@ -234,7 +230,7 @@ fun isPalindrome(n: Int): Boolean = n == revert(n)
 fun hasDifferentDigits(n: Int): Boolean {
     var num = n
     val digit = n % 10
-    while (num != 0){
+    while (num != 0) {
         if (num % 10 != digit) return true
         num /= 10
     }
@@ -252,12 +248,12 @@ fun squareSequenceDigit(n: Int): Int {
     var num = 1
     var length = 1
     var numSqr = 1
-    while (length < n){
+    while (length < n) {
         num++
         numSqr = num * num
         length += digitNumber(numSqr)
     }
-    return (numSqr / pow(10.0, (length - n).toDouble()) % 10).toInt()
+    return numSqr / pow(10.0, (length - n).toDouble()).toInt() % 10
 }
 
 /**
@@ -271,10 +267,10 @@ fun fibSequenceDigit(n: Int): Int {
     var length = 1
     var numFib1 = 1
     var numFib2 = 0
-    while (length < n){
+    while (length < n) {
         numFib1 += numFib2
         numFib2 = numFib1 - numFib2
         length += digitNumber(numFib1)
     }
-    return (numFib1 / pow(10.0, (length - n).toDouble()) % 10).toInt()
+    return numFib1 / pow(10.0, (length - n).toDouble()).toInt() % 10
 }
