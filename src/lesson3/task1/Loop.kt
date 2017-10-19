@@ -1,4 +1,5 @@
 @file:Suppress("UNUSED_PARAMETER")
+
 package lesson3.task1
 
 import java.lang.Math.*
@@ -36,7 +37,7 @@ fun isPrime(n: Int): Boolean {
  */
 fun isPerfect(n: Int): Boolean {
     var sum = 1
-    for (m in 2..n/2) {
+    for (m in 2..n / 2) {
         if (n % m > 0) continue
         sum += m
         if (sum > n) break
@@ -80,9 +81,14 @@ fun digitNumber(n: Int): Int {
  * Найти число Фибоначчи из ряда 1, 1, 2, 3, 5, 8, 13, 21, ... с номером n.
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
-fun fib(n: Int): Int = when {
-    n in 1..2 -> 1
-    else -> fib(n - 2) + fib(n - 1)
+fun fib(n: Int): Int {
+    var k = 1
+    var result = 0
+    for (i in 1..n) {
+        result += k
+        k = result - k
+    }
+    return result
 }
 
 /**
@@ -96,7 +102,7 @@ fun lcm(m: Int, n: Int): Int = abs(m * n) / gcd(m, n)
 
 //  НОД
 fun gcd(n: Int, m: Int): Int {
-    for (i in minOf(n,m) downTo 1) {
+    for (i in minOf(n, m) downTo 1) {
         if (m % i == 0 && n % i == 0) return i
     }
     return 0
@@ -143,9 +149,8 @@ fun isCoPrime(m: Int, n: Int): Boolean = lcm(m, n) == m * n
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
 fun squareBetweenExists(m: Int, n: Int): Boolean {
-    var k: Int
-    for (i in m..n){
-        k = sqrt(i.toDouble()).toInt()
+    for (i in m..n) {
+        val k = Math.round(sqrt(i.toDouble())).toInt()
         if (k * k == i) return true
     }
     return false
@@ -203,7 +208,7 @@ fun revert(n: Int): Int {
     var num = n
     var k = 0
     var result = 0
-    while (num != 0){
+    while (num != 0) {
         result *= 10
         result += num % 10
         num /= 10

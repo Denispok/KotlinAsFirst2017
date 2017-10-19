@@ -221,7 +221,16 @@ fun factorizeToString(n: Int): String = factorize(n).joinToString("*")
  * Результат перевода вернуть в виде списка цифр в base-ичной системе от старшей к младшей,
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
-fun convert(n: Int, base: Int): List<Int> = TODO()
+fun convert(n: Int, base: Int): List<Int> {
+    var k = n
+    val list: MutableList<Int> = mutableListOf()
+    while (k != 0) {
+        list.add(k % base)
+        k /= base
+    }
+    list.reverse()
+    return list
+}
 
 /**
  * Сложная
@@ -231,7 +240,17 @@ fun convert(n: Int, base: Int): List<Int> = TODO()
  * строчными буквами: 10 -> a, 11 -> b, 12 -> c и так далее.
  * Например: n = 100, base = 4 -> 1210, n = 250, base = 14 -> 13c
  */
-fun convertToString(n: Int, base: Int): String = TODO()
+fun convertToString(n: Int, base: Int): String {
+    var result = ""
+    val list = convert(n, base)
+    for (i in 0..(list.size - 1)) {
+        result += when {
+            list[i] < 10 -> list[i].toString()
+            else -> "abcdefghijklmnopqrstuvwxyz"[list[i] - 10]
+        }
+    }
+    return result
+}
 
 /**
  * Средняя
@@ -240,7 +259,14 @@ fun convertToString(n: Int, base: Int): String = TODO()
  * из системы счисления с основанием base в десятичную.
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
-fun decimal(digits: List<Int>, base: Int): Int = TODO()
+fun decimal(digits: List<Int>, base: Int): Int {
+    var result = 0
+    val list = digits.reversed()
+    for (i in 0..(digits.size - 1)) {
+        result += list[i] * pow(base.toDouble(), i.toDouble()).toInt()
+    }
+    return result
+}
 
 /**
  * Сложная
@@ -251,7 +277,17 @@ fun decimal(digits: List<Int>, base: Int): Int = TODO()
  * 10 -> a, 11 -> b, 12 -> c и так далее.
  * Например: str = "13c", base = 14 -> 250
  */
-fun decimalFromString(str: String, base: Int): Int = TODO()
+fun decimalFromString(str: String, base: Int): Int {
+    val list = mutableListOf<Int>()
+    for (i in 0..(str.length - 1)) {
+        val k = when {
+            str[i].isDigit() -> str[i].toString().toInt()
+            else -> "abcdefghijklmnopqrstuvwxyz".indexOf(str[i]) + 10
+        }
+        list.add(k)
+    }
+    return decimal(list, base)
+}
 
 /**
  * Сложная
