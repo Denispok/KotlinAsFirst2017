@@ -178,10 +178,8 @@ fun polynom(p: List<Double>, x: Double): Double {
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun accumulate(list: MutableList<Double>): MutableList<Double> {
-    var sum = 0.0
-    for (i in 0..(list.size - 1)) {
-        sum += list[i]
-        list[i] += sum - list[i]
+    for (i in 1..(list.size - 1)) {
+        list[i] += list[i - 1]
     }
     return list
 }
@@ -222,13 +220,17 @@ fun factorizeToString(n: Int): String = factorize(n).joinToString("*")
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
 fun convert(n: Int, base: Int): List<Int> {
+    if (n == 0) return listOf(0)
+
     var k = n
-    val list: MutableList<Int> = mutableListOf()
+    val list = mutableListOf<Int>()
+
     while (k != 0) {
         list.add(k % base)
         k /= base
     }
     list.reverse()
+
     return list
 }
 
@@ -243,12 +245,15 @@ fun convert(n: Int, base: Int): List<Int> {
 fun convertToString(n: Int, base: Int): String {
     var result = ""
     val list = convert(n, base)
+    val engAlph = "abcdefghijklmnopqrstuvwxyz"
+
     for (i in 0..(list.size - 1)) {
         result += when {
             list[i] < 10 -> list[i].toString()
-            else -> "abcdefghijklmnopqrstuvwxyz"[list[i] - 10]
+            else -> engAlph[list[i] - 10]
         }
     }
+
     return result
 }
 
@@ -279,10 +284,11 @@ fun decimal(digits: List<Int>, base: Int): Int {
  */
 fun decimalFromString(str: String, base: Int): Int {
     val list = mutableListOf<Int>()
+    val engAlph = "abcdefghijklmnopqrstuvwxyz"
     for (i in 0..(str.length - 1)) {
         val k = when {
             str[i].isDigit() -> str[i].toString().toInt()
-            else -> "abcdefghijklmnopqrstuvwxyz".indexOf(str[i]) + 10
+            else -> engAlph.indexOf(str[i]) + 10
         }
         list.add(k)
     }
