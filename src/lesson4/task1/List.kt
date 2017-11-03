@@ -392,7 +392,5 @@ fun russian(n: Int): String {
         k /= 10
     }
 
-    val lastSymb = result.length - 1
-    if (result[lastSymb] == ' ') result = result.removeRange(lastSymb..lastSymb)
-    return result
+    return result.trim()
 }
