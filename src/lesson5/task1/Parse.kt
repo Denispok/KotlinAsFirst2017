@@ -109,7 +109,29 @@ fun dateDigitToStr(digital: String): String {
  * Все символы в номере, кроме цифр, пробелов и +-(), считать недопустимыми.
  * При неверном формате вернуть пустую строку
  */
-fun flattenPhoneNumber(phone: String): String = TODO()
+fun flattenPhoneNumber(phone: String): String {
+    var result = ""
+    var phonevar = phone.filter { it !in listOf(' ', '-') }
+    try {
+        if (phonevar[0] == '+') {
+            result += '+'
+            phonevar = phonevar.removeRange(0..0)
+        }
+
+        val code = Regex("""\(\d*\)""").find(phonevar)
+        if (code != null) {
+            result += phonevar.slice(0..(phonevar.indexOf(code.value.first())) - 1)
+            result += code.value.filter { it !in listOf('(', ')') }
+            phonevar = phonevar.removeRange(0..code.range.last)
+        }
+
+        return if (phonevar.all { it.toString().toInt() in 0..9 }) {
+            result + phonevar
+        } else ""
+    } catch (e: Exception) {
+        return ""
+    }
+}
 
 /**
  * Средняя
