@@ -71,7 +71,7 @@ val months = listOf("января", "февраля", "марта", "апрел�
 fun dateStrToDigit(str: String): String {
     val list = str.split(" ")
     return try {
-        val month = months.indexOf(months.find { it == list[1] }) + 1
+        val month = months.indexOf(list[1]) + 1
         if (month == 0 || list.size != 3) ""
         else String.format("%02d.%02d.%d", list[0].toInt(), month, list[2].toInt())
     } catch (e: Exception) {
@@ -90,7 +90,7 @@ fun dateDigitToStr(digital: String): String {
     val list = digital.split(".")
     return try {
         val month = months[list[1].toInt() - 1]
-        if (list.size != 3 || list[0].length != 2) ""
+        if (list.size != 3) ""
         else String.format("%d %s %d", list[0].toInt(), month, list[2].toInt())
     } catch (e: Exception) {
         ""
@@ -143,7 +143,18 @@ fun flattenPhoneNumber(phone: String): String {
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
-fun bestLongJump(jumps: String): Int = TODO()
+fun bestLongJump(jumps: String): Int {
+    val list = jumps.split(" ")
+    var result = -1
+    for (i in list) {
+        if (i !in listOf("%", "-")) try {
+            if (result < i.toInt()) result = i.toInt()
+        } catch (e: Exception) {
+            return -1
+        }
+    }
+    return result
+}
 
 /**
  * Сложная
@@ -155,7 +166,10 @@ fun bestLongJump(jumps: String): Int = TODO()
  * Прочитать строку и вернуть максимальную взятую высоту (230 в примере).
  * При нарушении формата входной строки вернуть -1.
  */
-fun bestHighJump(jumps: String): Int = TODO()
+fun bestHighJump(jumps: String): Int {
+    val result = Regex("""\d+(?= \+)""").findAll(jumps)
+    return result.asSequence().map { it.value.toInt() }.max() ?: -1
+}
 
 /**
  * Сложная
@@ -166,7 +180,21 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Вернуть значение выражения (6 для примера).
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
-fun plusMinus(expression: String): Int = TODO()
+fun plusMinus(expression: String): Int {
+    val list = expression.split(" ")
+    try {
+        var result = list[0].toInt()
+        for (i in 1..(list.size - 1) step 2) {
+            when (list[i]) {
+                "+" -> result += list[i + 1].toInt()
+                "-" -> result -= list[i + 1].toInt()
+            }
+        }
+        return result
+    } catch (e: Exception) {
+        throw IllegalArgumentException("Wrong input string!")
+    }
+}
 
 /**
  * Сложная
@@ -177,7 +205,10 @@ fun plusMinus(expression: String): Int = TODO()
  * Вернуть индекс начала первого повторяющегося слова, или -1, если повторов нет.
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
-fun firstDuplicateIndex(str: String): Int = TODO()
+fun firstDuplicateIndex(str: String): Int {
+    val result = Regex("""([а-я]+) \1""").find(str.toLowerCase())
+    return if (result == null) -1 else result.range.first
+}
 
 /**
  * Сложная
@@ -190,7 +221,18 @@ fun firstDuplicateIndex(str: String): Int = TODO()
  * или пустую строку при нарушении формата строки.
  * Все цены должны быть положительными
  */
-fun mostExpensive(description: String): String = TODO()
+fun mostExpensive(description: String): String {
+    val list = description.split("; ", " ")
+    var maxPriceIndex = 1
+    return try {
+        for (priceIndex in 1..list.size step 2) {
+            if (list[priceIndex].toDouble() > list[maxPriceIndex].toDouble()) maxPriceIndex = priceIndex
+        }
+        list[maxPriceIndex - 1]
+    } catch (e: Exception) {
+        ""
+    }
+}
 
 /**
  * Сложная
