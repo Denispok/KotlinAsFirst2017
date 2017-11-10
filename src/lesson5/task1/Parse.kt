@@ -147,7 +147,7 @@ fun bestLongJump(jumps: String): Int {
     val list = jumps.split(" ")
     var result = -1
     for (i in list) {
-        if (i !in listOf("%", "-")) try {
+        if (i !in listOf("%", "-", "")) try {
             if (result < i.toInt()) result = i.toInt()
         } catch (e: Exception) {
             return -1
@@ -167,7 +167,7 @@ fun bestLongJump(jumps: String): Int {
  * При нарушении формата входной строки вернуть -1.
  */
 fun bestHighJump(jumps: String): Int {
-    val result = Regex("""\d+(?= \+)""").findAll(jumps)
+    val result = Regex("""\d+(?= [%-+]*\+[%-+]*)""").findAll(jumps)
     return result.asSequence().map { it.value.toInt() }.max() ?: -1
 }
 
