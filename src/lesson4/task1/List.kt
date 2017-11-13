@@ -341,9 +341,10 @@ fun russian(n: Int): String {
 
     result = russian3(n % 1000, 'm')
     if (n > 999) {
-        result = when (n % 10000 / 1000) {
-            1 -> thous[0]
-            in 2..4 -> thous[1]
+        result = when {
+            (n % 100000) / 1000 in 10..19 -> thous[2]
+            (n % 10000) / 1000 == 1 -> thous[0]
+            (n % 10000) / 1000 in 2..4 -> thous[1]
             else -> thous[2]
         } + result
         result = russian3(n / 1000, 'f') + result
