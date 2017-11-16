@@ -171,14 +171,19 @@ class Line private constructor(val b: Double, val angle: Double) {
  *
  * Построить прямую по отрезку
  */
-fun lineBySegment(s: Segment): Line = Line(s.begin, Math.asin(abs(s.begin.y - s.end.y) / s.length()))
+fun lineBySegment(s: Segment): Line {
+    var angle = atan((s.begin.y - s.end.y) / (s.begin.x - s.end.x))
+    if (angle < 0) angle += PI
+    else if (angle >= PI) angle -= PI
+    return Line(s.begin, angle)
+}
 
 /**
  * Средняя
  *
  * Построить прямую по двум точкам
  */
-fun lineByPoints(a: Point, b: Point): Line = Line(a, Math.asin(abs(a.y - b.y) / a.distance(b)))
+fun lineByPoints(a: Point, b: Point): Line = lineBySegment(Segment(a, b))
 
 /**
  * Сложная
@@ -224,7 +229,6 @@ fun circleByThreePoints(a: Point, b: Point, c: Point): Circle {
     val bisec2 = bisectorByPoints(a, c)
     val center = bisec1.crossPoint(bisec2)
     val radius = center.distance(a)
-    println(Circle(center, radius))
     return Circle(center, radius)
 }
 
