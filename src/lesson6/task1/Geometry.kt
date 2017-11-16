@@ -3,6 +3,7 @@
 package lesson6.task1
 
 import lesson1.task1.sqr
+import lesson4.task1.center
 import java.lang.Math.*
 
 /**
@@ -170,21 +171,21 @@ class Line private constructor(val b: Double, val angle: Double) {
  *
  * Построить прямую по отрезку
  */
-fun lineBySegment(s: Segment): Line = TODO()
+fun lineBySegment(s: Segment): Line = Line(s.begin, Math.asin(abs(s.begin.y - s.end.y) / s.length()))
 
 /**
  * Средняя
  *
  * Построить прямую по двум точкам
  */
-fun lineByPoints(a: Point, b: Point): Line = TODO()
+fun lineByPoints(a: Point, b: Point): Line = Line(a, Math.asin(abs(a.y - b.y) / a.distance(b)))
 
 /**
  * Сложная
  *
  * Построить серединный перпендикуляр по отрезку или по двум точкам
  */
-fun bisectorByPoints(a: Point, b: Point): Line = TODO()
+fun bisectorByPoints(a: Point, b: Point): Line = Line(Segment(a, b).center(), (lineByPoints(a, b).angle + PI / 2) % PI)
 
 /**
  * Средняя
@@ -192,7 +193,22 @@ fun bisectorByPoints(a: Point, b: Point): Line = TODO()
  * Задан список из n окружностей на плоскости. Найти пару наименее удалённых из них.
  * Если в списке менее двух окружностей, бросить IllegalArgumentException
  */
-fun findNearestCirclePair(vararg circles: Circle): Pair<Circle, Circle> = TODO()
+fun findNearestCirclePair(vararg circles: Circle): Pair<Circle, Circle> {
+    if (circles.size < 2) throw IllegalArgumentException("< 2 circles")
+
+    var result = Pair(circles[0], circles[1])
+    var distance = circles[0].distance(circles[1])
+
+    for (i in 0..(circles.size - 1)) {
+        for (k in (i + 1)..(circles.size - 1)) {
+            if (circles[i].distance(circles[k]) < distance) {
+                result = Pair(circles[i], circles[k])
+                distance = circles[i].distance(circles[k])
+            }
+        }
+    }
+    return result
+}
 
 /**
  * Сложная
@@ -203,7 +219,14 @@ fun findNearestCirclePair(vararg circles: Circle): Pair<Circle, Circle> = TODO()
  * (построить окружность по трём точкам, или
  * построить окружность, описанную вокруг треугольника - эквивалентная задача).
  */
-fun circleByThreePoints(a: Point, b: Point, c: Point): Circle = TODO()
+fun circleByThreePoints(a: Point, b: Point, c: Point): Circle {
+    val bisec1 = bisectorByPoints(a, b)
+    val bisec2 = bisectorByPoints(a, c)
+    val center = bisec1.crossPoint(bisec2)
+    val radius = center.distance(a)
+    println(Circle(center, radius))
+    return Circle(center, radius)
+}
 
 /**
  * Очень сложная

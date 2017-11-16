@@ -167,7 +167,7 @@ fun bestLongJump(jumps: String): Int {
  * При нарушении формата входной строки вернуть -1.
  */
 fun bestHighJump(jumps: String): Int {
-    val result = Regex("""\d+(?= [%-+]*\+[%-+]*)""").findAll(jumps)
+    val result = Regex("""\d+(?= [%\-+]*\+)""").findAll(jumps)
     return result.asSequence().map { it.value.toInt() }.max() ?: -1
 }
 
@@ -207,7 +207,7 @@ fun plusMinus(expression: String): Int {
  */
 fun firstDuplicateIndex(str: String): Int {
     val result = Regex("""([а-я]+) \1""").find(str.toLowerCase())
-    return if (result == null) -1 else result.range.first
+    return result?.range?.first ?: -1
 }
 
 /**
