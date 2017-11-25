@@ -110,27 +110,10 @@ fun dateDigitToStr(digital: String): String {
  * При неверном формате вернуть пустую строку
  */
 fun flattenPhoneNumber(phone: String): String {
-    var result = ""
-    var phonevar = phone.filter { it !in listOf(' ', '-') }
-    try {
-        if (phonevar[0] == '+') {
-            result += '+'
-            phonevar = phonevar.removeRange(0..0)
-        }
-
-        val code = Regex("""\(\d*\)""").find(phonevar)
-        if (code != null) {
-            result += phonevar.slice(0..(phonevar.indexOf(code.value.first())) - 1)
-            result += code.value.filter { it !in listOf('(', ')') }
-            phonevar = phonevar.removeRange(0..code.range.last)
-        }
-
-        return if (phonevar.all { it.toString().toInt() in 0..9 }) {
-            result + phonevar
-        } else ""
-    } catch (e: Exception) {
-        return ""
-    }
+    val phoneFiltered = phone.filter { it !in listOf(' ', '-') }
+    val phoneFormat = Regex("""^\+?\d+(\(\d+\))?\d+${'$'}""").find(phoneFiltered)
+    return if (phoneFormat != null) phoneFiltered.filter { it !in listOf('(', ')') }
+    else ""
 }
 
 /**
@@ -222,13 +205,19 @@ fun firstDuplicateIndex(str: String): Int {
  * Все цены должны быть положительными
  */
 fun mostExpensive(description: String): String {
-    val list = description.split("; ", " ")
-    var maxPriceIndex = 1
+    val products = description.split("; ")
+    var maxPriceIndex = 0
+    var maxCost = 0.0
     return try {
-        for (priceIndex in 1..list.size step 2) {
-            if (list[priceIndex].toDouble() > list[maxPriceIndex].toDouble()) maxPriceIndex = priceIndex
+        for (productIndex in 0..(products.size - 1)) {
+            val product = products[productIndex].split(" ")
+            val cost = product[1].toDouble()
+            if (cost > maxCost) {
+                maxPriceIndex = productIndex
+                maxCost = cost
+            }
         }
-        list[maxPriceIndex - 1]
+        products[maxPriceIndex].split(" ")[0]
     } catch (e: Exception) {
         ""
     }

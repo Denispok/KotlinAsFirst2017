@@ -111,16 +111,18 @@ data class Segment(val begin: Point, val end: Point) {
  * Дано множество точек. Вернуть отрезок, соединяющий две наиболее удалённые из них.
  * Если в множестве менее двух точек, бросить IllegalArgumentException
  */
-fun diameter(vararg points: Point): Segment {
+fun diameter(points: List<Point>): Segment {
     if (points.size < 2) throw IllegalArgumentException("less than 2 points")
     var result = Segment(points[0], points[1])
-    for (i in points) {
-        for (k in points) {
-            if (i.distance(k) > result.length()) result = Segment(i, k)
+    for (i in 0..(points.size - 1)) {
+        for (k in (i + 1)..(points.size - 1)) {
+            if (points[i].distance(points[k]) > result.length()) result = Segment(points[i], points[k])
         }
     }
     return result
 }
+
+fun diameter(vararg points: Point) = diameter(points.toList())
 
 /**
  * Простая
@@ -206,9 +208,10 @@ fun findNearestCirclePair(vararg circles: Circle): Pair<Circle, Circle> {
 
     for (i in 0..(circles.size - 1)) {
         for (k in (i + 1)..(circles.size - 1)) {
-            if (circles[i].distance(circles[k]) < distance) {
+            val circlesDistance = circles[i].distance(circles[k])
+            if (circlesDistance < distance) {
                 result = Pair(circles[i], circles[k])
-                distance = circles[i].distance(circles[k])
+                distance = circlesDistance
             }
         }
     }
