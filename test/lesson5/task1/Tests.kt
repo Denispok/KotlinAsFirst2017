@@ -59,6 +59,7 @@ class Tests {
         assertEquals("", flattenPhoneNumber("ab-123"))
         assertEquals("+12345", flattenPhoneNumber("+12 (3) 4-5"))
         assertEquals("", flattenPhoneNumber("134_+874"))
+        assertEquals("0", flattenPhoneNumber("0"))
     }
 
     @Test
@@ -97,6 +98,7 @@ class Tests {
         assertEquals(9, firstDuplicateIndex("Он пошёл в в школу"))
         assertEquals(40, firstDuplicateIndex("Яблоко упало на ветку с ветки оно упало на на землю"))
         assertEquals(9, firstDuplicateIndex("Мы пошли прямо Прямо располагался магазин"))
+        assertEquals(150, firstDuplicateIndex("1 ; - F I U o U [ } Z e t 2 * d v 7 O ) ! R \\ ` { # @ u \\ : O ? 5 3 h C 0 i w O F 8 / 0 $ m * : Q < O # s 9 j G P f O p L c / u Q T Y 8 $ 7 0 6 ; ) v l L V 3 7 O > W 1 1 W @ x z o E x S d Y g # # P - e Q = u j = b ! C & : a X G ; c N ] 7 8 ) , p / a h 4 P"))
     }
 
     @Test
