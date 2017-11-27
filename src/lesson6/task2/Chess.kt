@@ -106,7 +106,7 @@ fun rookMoveNumber(start: Square, end: Square): Int {
 fun rookTrajectory(start: Square, end: Square): List<Square> =
         when (rookMoveNumber(start, end)) {
             1 -> listOf(start, end)
-            2 -> listOf(start, Square(start.row, end.row), end)
+            2 -> listOf(start, Square(start.column, end.row), end)
             else -> listOf(start)
         }
 
