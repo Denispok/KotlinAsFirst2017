@@ -267,7 +267,7 @@ fun kingTrajectory(start: Square, end: Square): List<Square> {
  * Пример: knightMoveNumber(Square(3, 1), Square(6, 3)) = 3.
  * Конь может последовательно пройти через клетки (5, 2) и (4, 4) к клетке (6, 3).
  */
-fun knightMoveNumber(start: Square, end: Square): Int = TODO()
+fun knightMoveNumber(start: Square, end: Square): Int = knightTrajectory(start, end).size - 1
 
 /**
  * Очень сложная
@@ -289,4 +289,35 @@ fun knightMoveNumber(start: Square, end: Square): Int = TODO()
  *
  * Если возможно несколько вариантов самой быстрой траектории, вернуть любой из них.
  */
-fun knightTrajectory(start: Square, end: Square): List<Square> = TODO()
+fun knightTrajectory(start: Square, end: Square): List<Square> {
+    if (!start.inside() || !end.inside()) throw IllegalArgumentException("wrong squares")
+
+    var trajectories = mutableSetOf(mutableListOf(start))
+    val visited = mutableSetOf(start)
+
+    while (!trajectories.any { it.contains(end) }) {
+        val newTrajectories = mutableSetOf<MutableList<Square>>()
+        for (trajectory in trajectories) {
+            val last = trajectory.last()
+            val turns = listOf(
+                    Square(last.column + 1, last.row - 2), Square(last.column + 2, last.row - 1),
+                    Square(last.column + 2, last.row + 1), Square(last.column + 1, last.row + 2),
+                    Square(last.column - 1, last.row + 2), Square(last.column - 2, last.row + 1),
+                    Square(last.column - 2, last.row - 1), Square(last.column -1, last.row - 2))
+            for (turn in turns){
+                if (turn.inside() && turn !in visited){
+                    val newTrajectory = trajectory + turn
+                    if (turn == end) {
+                        return newTrajectory
+                    }
+                    newTrajectories.add(newTrajectory.toMutableList())
+                    visited.add(turn)
+                }
+            }
+        }
+        trajectories = newTrajectories
+    }
+
+    return trajectories.last()
+}
+
