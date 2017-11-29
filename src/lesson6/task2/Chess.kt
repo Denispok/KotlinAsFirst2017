@@ -45,7 +45,7 @@ data class Square(val column: Int, val row: Int) {
  * Если нотация некорректна, бросить IllegalArgumentException
  */
 fun square(notation: String): Square {
-    val columns = listOf('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h')
+    val columns = "abcdefgh"
     try {
         val column = notation[0]
         val row = notation[1].toString().toInt()
@@ -295,7 +295,9 @@ fun knightTrajectory(start: Square, end: Square): List<Square> {
     var trajectories = mutableSetOf(mutableListOf(start))
     val visited = mutableSetOf(start)
 
-    while (!trajectories.any { it.contains(end) }) {
+    if (trajectories.single() == listOf(end)) return trajectories.single()
+
+    while (true) {
         val newTrajectories = mutableSetOf<MutableList<Square>>()
         for (trajectory in trajectories) {
             val last = trajectory.last()
@@ -317,7 +319,5 @@ fun knightTrajectory(start: Square, end: Square): List<Square> {
         }
         trajectories = newTrajectories
     }
-
-    return trajectories.last()
 }
 

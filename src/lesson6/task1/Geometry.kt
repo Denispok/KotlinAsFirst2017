@@ -162,7 +162,7 @@ class Line private constructor(val b: Double, val angle: Double) {
             }
             other.angle == PI / 2 -> {
                 x = -other.b
-                y = -b * tan(angle) + b / cos(angle)
+                y = -other.b * tan(angle) + b / cos(angle)
             }
             else -> {
                 x = (other.b / cos(other.angle) - b / cos(angle)) / (tan(angle) - tan(other.angle))
