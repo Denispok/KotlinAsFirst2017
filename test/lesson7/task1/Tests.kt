@@ -3,6 +3,7 @@ package lesson7.task1
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
+import kotlin.test.assertFalse
 
 class Tests {
     @Test
@@ -48,5 +49,17 @@ class Tests {
                 assertEquals(strings[index++], matrix[row, column])
             }
         }
+    }
+
+    @Test
+    fun matrixEquals() {
+        val matrix1 = createMatrix(40, 50, "333")
+        val matrix2 = createMatrix(40, 50, "333")
+        val matrix3 = createMatrix(40, 50, 14)
+        val matrix4 = createMatrix(40, 50, 0)
+
+        assertTrue(matrix1 == matrix2)
+        assertFalse(matrix1 == matrix3)
+        assertFalse(matrix3 == matrix4)
     }
 }
