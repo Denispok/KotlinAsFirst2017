@@ -82,7 +82,7 @@ class MatrixImpl<E>(override val height: Int, override val width: Int, val e: E)
     }
 
     override fun toString(): String {
-        var result = StringBuilder()
+        val result = StringBuilder()
         for (row in 0..(height - 1)) {
             for (column in 0..(width - 1)) {
                 result.append('[', this[row, column], ']')

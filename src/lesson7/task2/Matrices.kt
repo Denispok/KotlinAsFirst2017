@@ -1,8 +1,11 @@
 @file:Suppress("UNUSED_PARAMETER")
+
 package lesson7.task2
 
+import lesson7.task1.Cell
 import lesson7.task1.Matrix
 import lesson7.task1.createMatrix
+import java.lang.Math.pow
 
 // Все задачи в этом файле требуют наличия реализации интерфейса "Матрица" в Matrix.kt
 
@@ -58,8 +61,36 @@ operator fun Matrix<Int>.plus(other: Matrix<Int>): Matrix<Int> {
  *  1  2  3  4
  * 10 11 12  5
  *  9  8  7  6
+ *
+ *  [0, 0] [1, 0] [2, 0] [3, 0]
+ *  [3, 0] [3, 1] [3, 2]
+ *  [3, 2] [2, 2] [1, 2] [0, 2]
+ *
  */
-fun generateSpiral(height: Int, width: Int): Matrix<Int> = TODO()
+fun generateSpiral(height: Int, width: Int): Matrix<Int> {
+    val result = createMatrix(height, width, 1)
+    val visited = mutableSetOf<Cell>()
+    var current = Cell(0, 0)
+    var direction = 0
+    var count = 1
+
+    while (count != width * height) {
+        val next = when (direction) {
+            0 -> Cell(current.row, current.column + 1)
+            1 -> Cell(current.row + 1, current.column)
+            2 -> Cell(current.row, current.column - 1)
+            else -> Cell(current.row - 1, current.column)
+        }
+
+        if (next !in visited && next.column in 0..(width - 1) && next.row in 0..(height - 1)) {
+            visited.add(current)
+            current = next
+            result[current.row, current.column] = ++count
+        } else direction = (direction + 1) % 4
+    }
+
+    return result
+}
 
 /**
  * Сложная
@@ -75,7 +106,25 @@ fun generateSpiral(height: Int, width: Int): Matrix<Int> = TODO()
  *  1  2  2  2  2  1
  *  1  1  1  1  1  1
  */
-fun generateRectangles(height: Int, width: Int): Matrix<Int> = TODO()
+fun minOf(vararg digits: Int): Int {
+    var min = digits[0]
+    for (i in digits) {
+        if (i < min) min = i
+    }
+    return min
+}
+
+fun generateRectangles(height: Int, width: Int): Matrix<Int> {
+    val result = createMatrix(height, width, 0)
+
+    for (row in 0..(height - 1)) {
+        for (col in 0..(width - 1)) {
+            result[row, col] = minOf(col + 1, row + 1, width - col, height - row)
+        }
+    }
+
+    return result
+}
 
 /**
  * Сложная
@@ -90,7 +139,28 @@ fun generateRectangles(height: Int, width: Int): Matrix<Int> = TODO()
  * 10 13 16 18
  * 14 17 19 20
  */
-fun generateSnake(height: Int, width: Int): Matrix<Int> = TODO()
+fun generateSnake(height: Int, width: Int): Matrix<Int> {
+    val result = createMatrix(height, width, 0)
+    var count = 1
+
+    fun fillDiagonal(start: Cell) {
+        var current = start
+        while (current.row <= height - 1 && current.column >= 0) {
+            result[current.row, current.column] = count++
+            current = Cell(current.row + 1, current.column - 1)
+        }
+    }
+
+    for (col in 0..(width - 1)) {
+        fillDiagonal(Cell(0, col))
+    }
+
+    for (row in 1..(height - 1)) {
+        fillDiagonal(Cell(row, width - 1))
+    }
+
+    return result
+}
 
 /**
  * Средняя

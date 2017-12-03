@@ -47,6 +47,8 @@ class Tests {
             for (column in 0 until matrix.width) {
                 assertEquals(strings[index++], matrix[row, column])
             }
+
+
         }
     }
 
