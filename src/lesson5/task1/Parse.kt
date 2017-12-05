@@ -273,3 +273,30 @@ fun fromRoman(roman: String): Int = TODO()
  *
  */
 fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> = TODO()
+
+
+//  ТЕСТОВАЯ ЗАДАЧА
+//  Петров Иван - Математика 3, Физика 4, Химия 5
+
+fun examPass (students: List<String>, threshold: Double): List<String> {
+    if (threshold !in 3.0..5.0) throw IllegalArgumentException("wrong threshold")
+    for (student in students) {
+        Regex("""^[а-яА-Я]+ [а-яА-Я]+ +- +([а-яА-Я]+ +[2345], +)*([а-яА-Я]+ +[2345])${'$'}""").find(student)
+                ?: throw IllegalArgumentException("wrong list of students")
+    }
+
+    val result = mutableListOf<String>()
+
+    for (student in students) {
+        val marks = Regex("""\d""").findAll(student).map { it.value.toInt() }.toList()
+        val sum = marks.reduce { acc, k -> acc + k }
+        val average = sum.toDouble() / marks.size.toDouble()
+
+        if (average > threshold) {
+            result.add(Regex("""[а-яА-Я]+ +[а-яА-Я]+""").find(student)!!.value)
+        }
+    }
+
+    return result
+}
+

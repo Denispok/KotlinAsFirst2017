@@ -4,8 +4,8 @@ package lesson7.task2
 
 import lesson7.task1.Cell
 import lesson7.task1.Matrix
+import lesson7.task1.MatrixImpl
 import lesson7.task1.createMatrix
-import java.lang.Math.pow
 
 // Все задачи в этом файле требуют наличия реализации интерфейса "Матрица" в Matrix.kt
 
@@ -173,7 +173,18 @@ fun generateSnake(height: Int, width: Int): Matrix<Int> {
  * 4 5 6      8 5 2
  * 7 8 9      9 6 3
  */
-fun <E> rotate(matrix: Matrix<E>): Matrix<E> = TODO()
+fun <E> rotate(matrix: Matrix<E>): Matrix<E> {
+    if (matrix.height != matrix.width) throw IllegalArgumentException("not square matrix")
+
+    val result = MatrixImpl<E>(matrix.width, matrix.height, matrix[0, 0])
+    for (row in 0..(matrix.height - 1)) {
+        for (col in 0..(matrix.width - 1)) {
+            result[col, (matrix.width - 1) - row] = matrix[row, col]
+        }
+    }
+
+    return result
+}
 
 /**
  * Сложная
@@ -188,7 +199,26 @@ fun <E> rotate(matrix: Matrix<E>): Matrix<E> = TODO()
  * 1 2 3
  * 3 1 2
  */
-fun isLatinSquare(matrix: Matrix<Int>): Boolean = TODO()
+fun isLatinSquare(matrix: Matrix<Int>): Boolean {
+    if (matrix.height != matrix.width) return false
+
+    val elems = mutableSetOf<Int>()
+    for (i in 1..matrix.height) {
+        elems.add(i)
+    }
+
+    for (row in 0 until matrix.height) {
+        val rowElems = mutableSetOf<Int>()
+        val colElems = mutableSetOf<Int>()
+        for (col in 0 until matrix.width) {
+            rowElems.add(matrix[row, col])
+            colElems.add(matrix[col, row])
+        }
+        if (colElems != elems || rowElems != elems) return false
+    }
+
+    return true
+}
 
 /**
  * Средняя
@@ -207,7 +237,34 @@ fun isLatinSquare(matrix: Matrix<Int>): Boolean = TODO()
  *
  * 42 ===> 0
  */
-fun sumNeighbours(matrix: Matrix<Int>): Matrix<Int> = TODO()
+fun sumNeighbours(matrix: Matrix<Int>): Matrix<Int> {
+    if (matrix.height == 1 && matrix.width == 1) return createMatrix(1, 1, 0)
+
+    val height = matrix.height
+    val width = matrix.width
+    val result = createMatrix(height, width, 0)
+
+    for (row in 0 until height) {
+        for (col in 0 until width) {
+            if (row - 1 in 0 until height) {
+                if (col - 1 in 0 until width) result[row, col] += matrix[row - 1, col - 1]
+                result[row, col] += matrix[row - 1, col]
+                if (col + 1 in 0 until width) result[row, col] += matrix[row - 1, col + 1]
+            }
+
+            if (col - 1 in 0 until width) result[row, col] += matrix[row, col - 1]
+            if (col + 1 in 0 until width) result[row, col] += matrix[row, col + 1]
+
+            if (row + 1 in 0 until height) {
+                if (col - 1 in 0 until width) result[row, col] += matrix[row + 1, col - 1]
+                result[row, col] += matrix[row + 1, col]
+                if (col + 1 in 0 until width) result[row, col] += matrix[row + 1, col + 1]
+            }
+        }
+    }
+
+    return result
+}
 
 /**
  * Средняя
@@ -314,7 +371,34 @@ operator fun Matrix<Int>.times(other: Matrix<Int>): Matrix<Int> = TODO(this.toSt
  * 0  4 13  6
  * 3 10 11  8
  */
-fun fifteenGameMoves(matrix: Matrix<Int>, moves: List<Int>): Matrix<Int> = TODO()
+fun Matrix<Int>.findCell(matrix: Matrix<Int>, value: Int): Cell {
+    for (row in 0 until matrix.height) {
+        for (col in 0 until matrix.width) {
+            if (matrix[row,col] == value) return Cell(row, col)
+        }
+    }
+    return Cell(0, 0)
+}
+
+fun fifteenGameMoves(matrix: Matrix<Int>, moves: List<Int>): Matrix<Int> {
+    var zeroPosition = matrix.findCell(matrix, 0)
+
+    for (move in moves) {
+        val movePosition = matrix.findCell(matrix, move)
+        if (move !in 1..15 || !(Cell(movePosition.row + 1, movePosition.column) == zeroPosition ||
+                                Cell(movePosition.row, movePosition.column - 1) == zeroPosition ||
+                                Cell(movePosition.row - 1, movePosition.column) == zeroPosition||
+                                Cell(movePosition.row, movePosition.column + 1) == zeroPosition))
+            throw IllegalStateException("wrong moves")
+        else {
+            matrix[movePosition] = 0
+            matrix[zeroPosition] = move
+            zeroPosition = movePosition
+        }
+    }
+
+    return matrix
+}
 
 /**
  * Очень сложная
