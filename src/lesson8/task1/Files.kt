@@ -147,14 +147,65 @@ fun centerFile(inputName: String, outputName: String) {
  * 6) Число пробелов между более левой парой соседних слов должно быть больше или равно числу пробелов
  *    между более правой парой соседних слов.
  *
- * Следует учесть, что входной файл может содержать последовательности из нескольких пробелов  между слвоами. Такие
+ * Следует учесть, что входной файл может содержать последовательности из нескольких пробелов  между словами. Такие
  * последовательности следует учитывать при выравнивании и при необходимости избавляться от лишних пробелов.
  * Из этого следуют следующие правила:
  * 7) В самой длинной строке каждая пара соседних слов должна быть отделена В ТОЧНОСТИ одним пробелом
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
+fun lengthOfLine(line: List<String>): Int {
+    var length = 0
+    for (i in line) {
+        length += i.length
+    }
+    return length
+}
+
+fun List<String>.addSpacesAfter(spaces: Int): List<String> {
+    val result = this.toMutableList()
+    if (this.size != 1)
+        for (i in 0 until spaces) {
+            result[i % (this.size - 1)] += " "
+        }
+    return result.toList()
+}
+
+fun List<String>.clean(): List<String> {
+    val result = this.toMutableList()
+    result.removeIf { it == "" }
+    return result.toList()
+}
+
 fun alignFileByWidth(inputName: String, outputName: String) {
-    TODO()
+    val inputStream = File(inputName).bufferedReader()
+    val outputStream = File(outputName).bufferedWriter()
+    val lines = mutableListOf<List<String>>()
+    var maxLength = 0
+
+    for (line in inputStream.readLines()) {
+        var newLine = line.split(" ")
+        newLine = newLine.clean()
+        if (!newLine.isEmpty()) {
+            newLine = newLine.addSpacesAfter(newLine.size - 1)
+            lines.add(newLine)
+            val length = lengthOfLine(lines.last())
+            if (length > maxLength) maxLength = length
+        } else lines.add(listOf())
+    }
+
+    inputStream.close()
+
+    for (line in 0 until lines.size) {
+        if (!lines[line].isEmpty()) {
+            lines[line] = lines[line].addSpacesAfter(maxLength - lengthOfLine(lines[line]))
+            for (str in lines[line]) {
+                outputStream.write(str)
+            }
+        }
+        outputStream.newLine()
+    }
+
+    outputStream.close()
 }
 
 /**
