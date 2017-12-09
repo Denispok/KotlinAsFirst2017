@@ -59,8 +59,9 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
 
     for (line in inputStream.readLines()) {
         for (substring in substrings) {
-            result[substring] = result[substring]?.plus(Regex(substring.toLowerCase())
-                    .findAll(line.toLowerCase()).count()) ?: 0
+            val occurrences = Regex(substring.toLowerCase()).findAll(line.toLowerCase()).count()
+            result[substring] = if (result[substring] != null) result[substring]!! + occurrences
+            else occurrences
         }
     }
 
