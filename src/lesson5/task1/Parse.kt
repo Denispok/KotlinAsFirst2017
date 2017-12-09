@@ -171,6 +171,7 @@ fun plusMinus(expression: String): Int {
             when (list[i]) {
                 "+" -> result += list[i + 1].toInt()
                 "-" -> result -= list[i + 1].toInt()
+                else -> throw IllegalArgumentException("Wrong input string!")
             }
         }
         return result
