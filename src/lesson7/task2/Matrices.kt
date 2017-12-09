@@ -371,23 +371,24 @@ operator fun Matrix<Int>.times(other: Matrix<Int>): Matrix<Int> = TODO(this.toSt
  * 0  4 13  6
  * 3 10 11  8
  */
-fun Matrix<Int>.findCell(matrix: Matrix<Int>, value: Int): Cell {
-    for (row in 0 until matrix.height) {
-        for (col in 0 until matrix.width) {
-            if (matrix[row,col] == value) return Cell(row, col)
+fun Matrix<Int>.findCell(value: Int): Cell {
+    for (row in 0 until this.height) {
+        for (col in 0 until this.width) {
+            if (this[row, col] == value) return Cell(row, col)
         }
     }
+
     return Cell(0, 0)
 }
 
 fun fifteenGameMoves(matrix: Matrix<Int>, moves: List<Int>): Matrix<Int> {
-    var zeroPosition = matrix.findCell(matrix, 0)
+    var zeroPosition = matrix.findCell(0)
 
     for (move in moves) {
-        val movePosition = matrix.findCell(matrix, move)
+        val movePosition = matrix.findCell(move)
         if (move !in 1..15 || !(Cell(movePosition.row + 1, movePosition.column) == zeroPosition ||
                                 Cell(movePosition.row, movePosition.column - 1) == zeroPosition ||
-                                Cell(movePosition.row - 1, movePosition.column) == zeroPosition||
+                                Cell(movePosition.row - 1, movePosition.column) == zeroPosition ||
                                 Cell(movePosition.row, movePosition.column + 1) == zeroPosition))
             throw IllegalStateException("wrong moves")
         else {

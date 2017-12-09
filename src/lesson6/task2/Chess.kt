@@ -26,7 +26,7 @@ data class Square(val column: Int, val row: Int) {
      * Для клетки не в пределах доски вернуть пустую строку
      */
     fun notation(): String {
-        val columns = listOf('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h')
+        val columns = "abcdefgh"
         return if (inside()) {
             columns[column - 1].toString() + row.toString()
         } else ""
@@ -46,15 +46,17 @@ data class Square(val column: Int, val row: Int) {
  */
 fun square(notation: String): Square {
     val columns = "abcdefgh"
-    try {
+    val rows = "12345678"
+
+    if (notation.length == 2) {
         val column = notation[0]
-        val row = notation[1].toString().toInt()
-        if (notation.length == 2 && column in columns && row in 1..8) {
-            return Square(columns.indexOf(column) + 1, row)
-        } else throw IllegalArgumentException("")
-    } catch (e: Exception) {
-        throw IllegalArgumentException("wrong notation")
+        val row = notation[1]
+        if (column in columns && row in rows) {
+            return Square(columns.indexOf(column) + 1, row.toString().toInt())
+        }
     }
+
+    throw IllegalArgumentException("wrong notation")
 }
 
 /**
@@ -291,11 +293,10 @@ fun knightMoveNumber(start: Square, end: Square): Int = knightTrajectory(start, 
  */
 fun knightTrajectory(start: Square, end: Square): List<Square> {
     if (!start.inside() || !end.inside()) throw IllegalArgumentException("wrong squares")
+    if (start == end) return listOf(start)
 
     var trajectories = mutableSetOf(mutableListOf(start))
     val visited = mutableSetOf(start)
-
-    if (trajectories.single() == listOf(end)) return trajectories.single()
 
     while (true) {
         val newTrajectories = mutableSetOf<MutableList<Square>>()
@@ -305,9 +306,9 @@ fun knightTrajectory(start: Square, end: Square): List<Square> {
                     Square(last.column + 1, last.row - 2), Square(last.column + 2, last.row - 1),
                     Square(last.column + 2, last.row + 1), Square(last.column + 1, last.row + 2),
                     Square(last.column - 1, last.row + 2), Square(last.column - 2, last.row + 1),
-                    Square(last.column - 2, last.row - 1), Square(last.column -1, last.row - 2))
-            for (turn in turns){
-                if (turn.inside() && turn !in visited){
+                    Square(last.column - 2, last.row - 1), Square(last.column - 1, last.row - 2))
+            for (turn in turns) {
+                if (turn.inside() && turn !in visited) {
                     val newTrajectory = trajectory + turn
                     if (turn == end) {
                         return newTrajectory
