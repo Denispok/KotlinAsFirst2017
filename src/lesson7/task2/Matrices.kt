@@ -106,14 +106,6 @@ fun generateSpiral(height: Int, width: Int): Matrix<Int> {
  *  1  2  2  2  2  1
  *  1  1  1  1  1  1
  */
-fun minOf(vararg digits: Int): Int {
-    var min = digits[0]
-    for (i in digits) {
-        if (i < min) min = i
-    }
-    return min
-}
-
 fun generateRectangles(height: Int, width: Int): Matrix<Int> {
     val result = createMatrix(height, width, 0)
 
@@ -125,6 +117,16 @@ fun generateRectangles(height: Int, width: Int): Matrix<Int> {
 
     return result
 }
+
+/**
+ * Чувакииии!!! не вызывайте эту функцию с нулем аргументов, она вам бомбанёт!!!
+ * @return [Exception], when function have no arguments
+ * @author Shakhov Denis
+ * @see IntArray.min
+ * @param digits digits
+ * @throws [Exception] when function have no arguments
+ */
+fun minOf(vararg digits: Int) = digits.min()!!
 
 /**
  * Сложная
