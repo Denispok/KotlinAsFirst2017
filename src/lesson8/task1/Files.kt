@@ -59,7 +59,13 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
 
     for (line in inputStream.readLines()) {
         for (substring in substrings) {
-            val occurrences = Regex(substring.toLowerCase()).findAll(line.toLowerCase()).count()
+            var currentPos = 0
+            var occurrences = 0
+            while (true) {
+                currentPos = line.indexOf(substring, currentPos, true) + 1
+                if (currentPos == 0) break
+                else occurrences++
+            }
             result[substring] = if (result[substring] != null) result[substring]!! + occurrences
             else occurrences
         }
