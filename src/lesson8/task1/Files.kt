@@ -66,8 +66,7 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
                 if (currentPos == 0) break
                 else occurrences++
             }
-            result[substring] = if (result[substring] != null) result[substring]!! + occurrences
-            else occurrences
+            result[substring] = result.getOrDefault(substring, 0) + occurrences
         }
     }
 
@@ -159,13 +158,9 @@ fun centerFile(inputName: String, outputName: String) {
  * 7) В самой длинной строке каждая пара соседних слов должна быть отделена В ТОЧНОСТИ одним пробелом
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
-fun lengthOfLine(line: List<String>): Int {
-    var length = 0
-    for (i in line) {
-        length += i.length
-    }
-    return length
-}
+fun lengthOfLine(line: List<String>): Int = line.map { it.length }.reduce { acc, i -> acc + i }
+
+fun List<String>.clean(): List<String> = this.filter { it != "" }
 
 fun List<String>.addSpacesAfter(spaces: Int): List<String> {
     val result = this.toMutableList()
@@ -173,12 +168,6 @@ fun List<String>.addSpacesAfter(spaces: Int): List<String> {
         for (i in 0 until spaces) {
             result[i % (this.size - 1)] += " "
         }
-    return result.toList()
-}
-
-fun List<String>.clean(): List<String> {
-    val result = this.toMutableList()
-    result.removeIf { it == "" }
     return result.toList()
 }
 
@@ -201,10 +190,10 @@ fun alignFileByWidth(inputName: String, outputName: String) {
 
     inputStream.close()
 
-    for (line in 0 until lines.size) {
-        if (!lines[line].isEmpty()) {
-            lines[line] = lines[line].addSpacesAfter(maxLength - lengthOfLine(lines[line]))
-            for (str in lines[line]) {
+    for (line in lines) {
+        if (!line.isEmpty()) {
+            val newLine = line.addSpacesAfter(maxLength - lengthOfLine(line))
+            for (str in newLine) {
                 outputStream.write(str)
             }
         }

@@ -119,14 +119,11 @@ fun generateRectangles(height: Int, width: Int): Matrix<Int> {
 }
 
 /**
- * Чувакииии!!! не вызывайте эту функцию с нулем аргументов, она вам бомбанёт!!!
- * @return [Exception], when function have no arguments
+ * @return Zero, when function have no arguments
  * @author Shakhov Denis
  * @see IntArray.min
- * @param digits digits
- * @throws [Exception] when function have no arguments
  */
-fun minOf(vararg digits: Int) = digits.min()!!
+fun minOf(vararg digits: Int) = digits.min() ?: 0
 
 /**
  * Сложная
